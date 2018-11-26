@@ -1,4 +1,19 @@
-#ifndef MUTATION_TYPE_H
+   /* This file is part of IWEinferrence.
+
+    IWEinferrence is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    IWEinferrence is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with IWEinferrence.  If not, see <https://www.gnu.org/licenses/>. */
+
+MUTATION_TYPE_H
 #define MUTATION_TYPE_H
 
 #include <string>

@@ -1,12 +1,9 @@
-program: methylation_simulator
+program: IWEinference
 
 CXXFLAGS = -Wall -pedantic -O2 -g -std=c++11
 
-unit_test: methylation_simulator
-	cd Unit_Tests && make
-
-methylation_simulator: methylation_simulator.cc functionobjects.o functionobjects.hh felsenstein_pruning.o felsenstein_pruning.hh MCMC_step.o MCMC_step.hh mutationclass.o mutationclass.hh back_tree.o back_tree.hh parameters.o parameters.hh
-	g++ -o methylation_simulator methylation_simulator.cc functionobjects.o felsenstein_pruning.o MCMC_step.o mutationclass.o back_tree.o parameters.o $(CXXFLAGS)
+IWEinference: IWEinference.cc functionobjects.o functionobjects.hh felsenstein_pruning.o felsenstein_pruning.hh MCMC_step.o MCMC_step.hh mutationclass.o mutationclass.hh back_tree.o back_tree.hh parameters.o parameters.hh
+	g++ -o IWEinference IWEinference.cc functionobjects.o felsenstein_pruning.o MCMC_step.o mutationclass.o back_tree.o parameters.o $(CXXFLAGS)
 
 functionobjects.o: functionobjects.cc functionobjects.hh
 	g++ -c functionobjects.cc $(CXXFLAGS)
@@ -27,4 +24,4 @@ parameters.o: parameters.cc parameters.hh
 	g++ -c parameters.cc $(CXXFLAGS)
 
 clean:
-	rm ~.o methylation_simulator 
+	rm ~.o IWEinference 
