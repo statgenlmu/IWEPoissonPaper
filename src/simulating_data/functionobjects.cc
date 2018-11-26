@@ -1,0 +1,72 @@
+#include<iostream>
+#include "functionobjects.hh"
+//#include <boost/math/distributions/gamma_distribution.hpp>
+
+double BetaDistribution::operator()(mt19937 & re)
+{
+  boost::math::beta_distribution<> distr(alpha, beta);
+  uniform_real_distribution<double> uni_dist(0,1);
+   
+  return boost::math::quantile(distr,uni_dist(re));
+}
+
+BetaDistribution BetaDistribution::propose_new(RealProposalDistributionObject &a,RealProposalDistributionObject &b, mt19937 & re)
+{
+  return BetaDistribution(a(alpha,re),b(beta,re));
+}
+
+const double BetaDistribution::density(double x)
+{
+  boost::math::beta_distribution<> distr(alpha, beta);
+  return boost::math::pdf(distr,x);
+}
+
+
+double LogNormalProposal::operator()(const double current, mt19937 & re)
+{
+  if (exp(log(current))>pow(10,100)||exp(log(current))<pow(10,-100))
+    {
+      cerr<<"LogNormalProposal::operator(): Proposal is getting very small or large"<<endl;
+      return  log(current)>0 ? pow(10,100):pow(10,-100);
+    }
+  return exp(distribution(re)+log(current));
+}
+
+
+double LogNormalPriorDensity::operator()(const double x)
+{
+  return boost::math::pdf(dist,log(x));
+}
+
+
+
+vector <double> GammaRateConstruction::get_rate_acc(mt19937 & re)
+{
+
+  vector<double>rate_acc(n_rates,0);
+    
+ 
+  double upperq=1.0/n_rates;
+  double prev_limit=0;
+
+  cout<<alpha<<endl;
+  double next_limit=boost::math::quantile(gd,upperq);
+  for (int i=0; i<n_rates;++i)
+    {
+      // Note for the next step that due to the form of the odf, increasing the form parameter by 1
+      // exactly calculates the mean over an interval. helper gd is exactly increased by one.
+      rate_acc[i]=boost::math::cdf(helper_gd, next_limit)-boost::math::cdf(helper_gd, prev_limit);
+      upperq=min(0.999999,(1.0*(i+2))/n_rates);
+      prev_limit=next_limit;
+      next_limit=boost::math::quantile(gd,upperq);
+    }
+
+  double sum=0;
+  for (auto &i : rate_acc)
+    sum+=i;
+
+  for (auto &i : rate_acc)
+    i*=n_rates/sum;
+
+  return rate_acc;   
+}
