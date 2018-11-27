@@ -1,0 +1,78 @@
+IWEinference is a MCMC application where mouse cell methylation data is used to infer logarithms of the length of branches,
+logarithms of the shape parameter of the gamma distribution of rate acceleration factors, logarithm of the rate of methylation events,
+and presence of those along edges in the model I detailed in my reprot recently. 
+
+Every thousand MCMC steps the program outputs into the folowing files:
+log_branch_length.param (contains the logarithms of the branch lengths in each line, the order is given bellow where the cell names are)
+log_pcrate.param (contains the logarithms of the probability change rate in each line)
+log_shape.param (contains the logarithms of the shape parameter of the gamma distribution in each line)
+n_iter.param (contains the number of iterations)
+rate_acc.param (contains the rate accelerations derived from the shape parameter for easier viewing)
+n_affected_islands.param (gives the number of affected islands for each branch.
+npc.param (Gives the number of IWEs in each branch.)
+pc_change_info.param (Gives detailed information about the contained IWEs in each branch)
+
+The input that must be specified are the methylation states in each island for each cell type. 
+These must be written into files with the name CPG_ISLANDS_[name of cell type].txt
+Here [name of cell type] stands for the abbreviated name of the cell type in question.
+
+The cell type names are:
+HSC MPP1 MPP2 CLP CD4 CD8 B_cell CMP MEP Eryth GMP Granu Mono
+
+This is also the sequence the log branch lengths are given in.
+
+Each file with a celltype should contain the methylation information of that cell in the following way:
+Each line represents a cpg island. The sequence of the cpg island consists of the following characters:
+0 
+1
+2
+N or ?
+
+0 stands for unmethylated
+1 stands for partially methylated
+2 stands for fullymethylated
+N or ? stands for non available
+
+Commandline options:
+
+If the program is invoked without commandline options it performs estimation of all parameters a tree ressembling the hematopoietic cell lines starting from the mean values of the prior distirbutions.
+This can be influenced via command line options:
+
+-disable_modes followed by string of numbers disables inference for the respective paramter and the MCMC chain remains at the starting value.
+
+Modes are:
+
+ * 0 corresponds to sampling of new log branch lengths.
+ * 1 corresponds to sampling of new log shape params.
+ * 2 corresponds to sampling of new log IWE rates.
+ * 3 corresponds to sampling of new events.
+ * 4 corresponds to sampling of new invariant probabilities.
+ * 5 corresponds to sampling of new probabilites in the root.
+
+
+Strting values can be set by invoking
+
+-set_log_pcrate for the logarithm of the IWErate.
+-set_log_shape for the logarithm of the shape parameter.
+-set_invp for the invariant probability.
+
+Each of these options should be followed by a number.
+
+While the default topology is that of the mouse hematopoietic line, another tree can be used by invoking
+
+-use_custom_tree [tree]
+
+where [tree is that tree in Newick notation.
+
+One can set custom starting IWEs via
+
+-use_custom_transitions
+
+If one wants to this one needs to provide a file called p_change_info.sol containing IWEs in the same format as p_change_info.param.
+
+
+
+  
+
+
+
