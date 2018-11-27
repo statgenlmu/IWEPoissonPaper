@@ -1,0 +1,50 @@
+This tool generates sequences in each node in each tree for a tree according to the methylation model
+specified in paper name.
+
+To specify the size of the sequence use the command line option
+
+ -island_sizes  followed by unsinged island sizes,
+
+which describe the number of CPGsites in each island.
+
+To specify parameters used the following command line options are available:
+
+ -log_branch_length followed by 13 log branch lengths which are double, to specify the branch length. This option is obsolete if custom trees are used.
+ -log_shape, follwoed by a single double variable for the logarith, of the shape parameter
+ -log_pc_rate followed by a single double variable for the logarithm of the IWE rate.
+ -p_inv followed by single double between 0 and 1 for the rate of invariant sites.
+
+If using the default tree the order the branch lengths are given in is given by:
+HSC MPP1 MPP2 CLP CD4 CD8 B_cell CMP MEP Eryth GMP Granu Mono
+
+
+If you want to use a custom tree, invoke
+
+-use_custom_tree [tree]
+
+where [tree] is a Newick string with specified branch lengths.
+
+
+Output of sequences is written into files with the name CPG_ISLANDS_[name of cell type].txt
+Here [name of cell type] stands for the abbreviated name of the cell type in question.
+
+The cell type names are:
+HSC MPP1 MPP2 CLP CD4 CD8 B_cell CMP MEP Eryth GMP Granu Mono
+
+if using the default tree, or are specified within in the Newick tring if using a custom tree.
+
+Each file with a celltype should contain the methylation information of that cell in the following way:
+Each line represents a cpg island. The sequence of the cpg island consists of the following characters:
+0 
+1
+2
+
+
+0 stands for unmethylated
+1 stands for partially methylated
+2 stands for fullymethylated
+
+
+Additional output are the input parameters used which are given out in target_params.target
+and the IWEs simulated during the run which are given out in target_p_change_info.txt.
+
